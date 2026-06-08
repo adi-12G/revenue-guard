@@ -128,8 +128,7 @@ export default function Home() {
             </h3>
 
             <p className="text-4xl font-bold mt-2">
-              CSV Analysis
-            </p>
+              2.8L+            </p>
           </div>
 
           <div className="group relative overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950 p-6 transition-all duration-300 hover:border-indigo-500/40 hover:shadow-[0_0_30px_rgba(79,70,229,0.15)]">
@@ -148,7 +147,7 @@ export default function Home() {
             </h3>
 
             <p className="text-4xl font-bold mt-2">
-              Revenue Monitoring
+              150+
             </p>
           </div>
 
