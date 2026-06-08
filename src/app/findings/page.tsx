@@ -1,24 +1,50 @@
 "use client";
+
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useUser } from "@clerk/nextjs";
-export default async function FindingsPage() {
+
+export default function FindingsPage() {
   const { isSignedIn, user } = useUser();
-  const { data } = await supabase
-    .from("findings")
-    .select("*")
-    .eq("user_id", user?.id)
-    .order("created_at", {
-      ascending: false,
-    });
-   if(!isSignedIn) {
+
+  const [data, setData] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (user) {
+      fetchFindings();
+    }
+  }, [user]);
+
+  async function fetchFindings() {
+    const { data } = await supabase
+      .from("findings")
+      .select("*")
+      .eq("user_id", user?.id)
+      .order("created_at", {
+        ascending: false,
+      });
+
+    setData(data || []);
+  }
+
+  if (!isSignedIn) {
+    return (
+      <div className="p-8">
+        <h1 className="text-3xl font-bold mb-6">
+          Findings History
+        </h1>
+
+        <p>Please sign in to view findings.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-6">
         Findings History
       </h1>
-          <div className="p-8">
-      Please sign in to view findings.
-    </div>
+
       <table className="w-full border">
         <thead>
           <tr>
@@ -29,7 +55,7 @@ export default async function FindingsPage() {
         </thead>
 
         <tbody>
-          {data?.map((row) => (
+          {data.map((row) => (
             <tr key={row.id}>
               <td>{row.customer}</td>
               <td>{row.leak_type}</td>
@@ -40,5 +66,4 @@ export default async function FindingsPage() {
       </table>
     </div>
   );
-}
 }
