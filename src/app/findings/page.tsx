@@ -27,7 +27,25 @@ export default function FindingsPage() {
     setData(data || []);
   }
 
-  if (!isSignedIn) {
+ if (!isSignedIn) {
+  return (
+    <div className="max-w-7xl mx-auto p-8">
+      <h1 className="text-4xl font-bold mb-8">
+        Findings History
+      </h1>
+
+      <div className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-10 text-center">
+        <h2 className="text-xl font-semibold mb-2">
+          Sign in required
+        </h2>
+
+        <p className="text-zinc-400">
+          Please sign in to view your findings history.
+        </p>
+      </div>
+    </div>
+  );
+}
    return (
   <div className="max-w-7xl mx-auto p-8">
 
@@ -174,5 +192,5 @@ export default function FindingsPage() {
 
   </div>
 );
-}
+
 }
