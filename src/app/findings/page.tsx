@@ -15,6 +15,7 @@ export default function FindingsPage() {
     }
   }, [user]);
 
+<<<<<<< ours
   async function fetchFindings() {
     const { data } = await supabase
       .from("findings")
@@ -26,6 +27,13 @@ export default function FindingsPage() {
 
     setData(data || []);
   }
+=======
+async function fetchFindings() {
+    const res = await fetch("/api/findings");
+    const data = await res.json();
+    setData(data || []);
+}
+>>>>>>> theirs
 
  if (!isSignedIn) {
   return (
