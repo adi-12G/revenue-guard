@@ -1,19 +1,31 @@
-export function detectCrmMismatch(
-  rows: any[]
-) {
+export function detectCrmMismatch(rows: any[]) {
   return rows
     .filter(
       (row) =>
         row.in_crm?.toLowerCase() === "yes" &&
         row.in_stripe?.toLowerCase() === "no"
     )
-    .map((row) => ({
-      customer: row.company_name,
+    .map((row) => {
+      const loss =
+        Number(row.monthly_loss_inr) || 0;
 
-      leakType: "CRM Mismatch",
+      const issueType =
+        row.issue_type || "Missing in billing";
 
-      loss: Number(row.monthly_loss_inr),
+      return {
+        customer: row.company_name,
 
-      issueType: row.issue_type,
-    }));
+        leakType: "CRM Mismatch",
+
+        loss,
+
+        issueType,
+
+        detail:
+          `${issueType} — CRM record exists but billing record is missing`,
+
+        suggestedAction:
+          "Review the CRM account and create or restore the corresponding billing record",
+      };
+    });
 }
