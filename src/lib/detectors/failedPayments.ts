@@ -1,22 +1,37 @@
-export function detectFailedPayments(
-  rows: any[]
-) {
+export function detectFailedPayments(rows: any[]) {
   return rows
     .filter(
       (row) =>
         row.follow_up_done?.toLowerCase() === "no"
     )
-    .map((row) => ({
-      customer: row.company_name,
+    .map((row) => {
+      const invoiceAmount =
+        Number(row.invoice_amount_inr) || 0;
 
-      leakType: "Failed Payment",
+      const daysOutstanding =
+        Number(row.days_outstanding) || 0;
 
-      loss: Number(row.invoice_amount_inr),
+      const failureReason =
+        row.failure_reason || "Payment failed";
 
-      failureReason: row.failure_reason,
+      return {
+        customer: row.company_name,
 
-      daysOutstanding: Number(
-        row.days_outstanding
-      ),
-    }));
+        leakType: "Failed Payment",
+
+        loss: invoiceAmount,
+
+        failureReason,
+
+        daysOutstanding,
+
+        detail:
+          `${failureReason} — ${daysOutstanding} days outstanding`,
+
+        suggestedAction:
+          daysOutstanding > 30
+            ? "Escalate collection and contact customer immediately"
+            : "Follow up with customer and retry payment",
+      };
+    });
 }
